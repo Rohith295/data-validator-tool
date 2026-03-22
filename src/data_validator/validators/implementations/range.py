@@ -1,7 +1,7 @@
 from typing import Any, ClassVar
 
 import polars as pl
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, RootModel
 
 from data_validator.models import TabularData
 from data_validator.validators.base import ValidatorStrategy, missing_column_error
@@ -15,11 +15,15 @@ class RangeSpec(BaseModel):
     max: float | None = None
 
 
+class RangeCheckParams(RootModel[dict[str, RangeSpec]]):
+    pass
+
+
 @ValidatorRegistry.register("range_check")
 class RangeCheckValidator(ValidatorStrategy):
     """Checks that numeric column values fall within min/max bounds."""
 
-    params_type: ClassVar[Any] = dict[str, RangeSpec]
+    params_model: ClassVar[type[RangeCheckParams]] = RangeCheckParams
 
     def check(self, data: TabularData, params: Any) -> None:
         range_map: dict[str, RangeSpec] = params

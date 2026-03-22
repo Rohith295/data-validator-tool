@@ -14,6 +14,27 @@ SCHEMA = str(_ROOT / "my_schema.json")
 
 
 class TestCLI:
+    def test_list_checks(self):
+        result = runner.invoke(app, ["--list-checks"])
+        assert result.exit_code == 0
+        assert "range_check" in result.stdout
+
+    def test_describe_check(self):
+        result = runner.invoke(app, ["--describe-check", "range_check"])
+        assert result.exit_code == 0
+        assert "params model" in result.stdout
+        assert "RangeCheckParams" in result.stdout
+
+    def test_list_parsers(self):
+        result = runner.invoke(app, ["--list-parsers"])
+        assert result.exit_code == 0
+        assert "CsvParser" in result.stdout
+
+    def test_list_notifiers(self):
+        result = runner.invoke(app, ["--list-notifiers"])
+        assert result.exit_code == 0
+        assert "jsonl" in result.stdout
+
     def test_pass_exits_zero(self):
         result = runner.invoke(app, ["--file_path", GOOD_CSV, "--schema_path", SCHEMA, "-q"])
         assert result.exit_code == 0

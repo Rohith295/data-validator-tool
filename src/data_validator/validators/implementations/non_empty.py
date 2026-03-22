@@ -1,17 +1,22 @@
 from typing import Any, ClassVar
 
 import polars as pl
+from pydantic import RootModel
 
 from data_validator.models import TabularData
 from data_validator.validators.base import ValidatorStrategy, missing_column_error
 from data_validator.validators.registry import ValidatorRegistry
 
 
+class NonEmptyCheckParams(RootModel[list[str]]):
+    pass
+
+
 @ValidatorRegistry.register("non_empty_check")
 class NonEmptyCheckValidator(ValidatorStrategy):
     """Flags rows where specified columns are blank or null."""
 
-    params_type: ClassVar[Any] = list[str]
+    params_model: ClassVar[type[NonEmptyCheckParams]] = NonEmptyCheckParams
 
     def check(self, data: TabularData, params: Any) -> None:
         columns: list[str] = params

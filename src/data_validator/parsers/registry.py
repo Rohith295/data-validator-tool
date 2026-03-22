@@ -31,3 +31,8 @@ class ParserRegistry:
             supported = ", ".join(sorted(cls._parsers))
             raise ParseError(f"Unsupported file format: {ext}. Supported: {supported}")
         return cls._parsers[ext]()
+
+    @classmethod
+    def implementations(cls) -> list[type[ParserStrategy]]:
+        unique = {id(parser_cls): parser_cls for parser_cls in cls._parsers.values()}
+        return sorted(unique.values(), key=lambda parser_cls: parser_cls.__name__)

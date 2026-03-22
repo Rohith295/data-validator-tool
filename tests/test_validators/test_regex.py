@@ -33,4 +33,4 @@ class TestRegexCheck:
 
     def test_invalid_regex_pattern(self):
         with pytest.raises(ValueError, match="Invalid regex pattern"):
-            RegexCheckValidator.validate_params({"x": "[invalid"})
+            RegexCheckValidator.params_model.model_validate({"x": "[invalid"})

@@ -1,17 +1,22 @@
 from typing import Any, ClassVar
 
 import polars as pl
+from pydantic import RootModel
 
 from data_validator.models import TabularData
 from data_validator.validators.base import ValidatorStrategy, missing_column_error
 from data_validator.validators.registry import ValidatorRegistry
 
 
+class UniqueCheckParams(RootModel[list[str]]):
+    pass
+
+
 @ValidatorRegistry.register("unique_check")
 class UniqueCheckValidator(ValidatorStrategy):
     """Flags duplicate values in the specified columns."""
 
-    params_type: ClassVar[Any] = list[str]
+    params_model: ClassVar[type[UniqueCheckParams]] = UniqueCheckParams
 
     def check(self, data: TabularData, params: Any) -> None:
         columns: list[str] = params

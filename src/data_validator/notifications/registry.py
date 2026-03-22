@@ -27,3 +27,7 @@ class NotifierRegistry:
     @classmethod
     def available(cls) -> list[str]:
         return sorted(cls._notifiers)
+
+    @classmethod
+    def items(cls) -> list[tuple[str, type[Notifier]]]:
+        return sorted(cls._notifiers.items())

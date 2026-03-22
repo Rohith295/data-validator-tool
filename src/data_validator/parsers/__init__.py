@@ -1,7 +1,6 @@
-from data_validator.parsers.base import ParseError as ParseError
-from data_validator.parsers.base import ParserStrategy as ParserStrategy
+from data_validator.parsers.base import ParseError, ParserStrategy
 from data_validator.parsers.implementations import CsvParser, JsonParser, NdjsonParser
-from data_validator.parsers.registry import ParserRegistry as ParserRegistry
+from data_validator.parsers.registry import ParserRegistry
 
 __all__ = [
     "CsvParser",

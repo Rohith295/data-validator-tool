@@ -1,6 +1,7 @@
 from typing import Any, ClassVar, Literal
 
 import polars as pl
+from pydantic import RootModel
 
 from data_validator.models import TabularData
 from data_validator.validators.base import ValidatorStrategy, missing_column_error
@@ -11,11 +12,15 @@ _FLOAT_RE = r"^-?(\d+\.?\d*|\d*\.?\d+)([eE][+-]?\d+)?$"
 _BOOL_VALUES = ["true", "false", "0", "1"]
 
 
+class TypesCheckParams(RootModel[dict[str, Literal["string", "integer", "float", "bool"]]]):
+    pass
+
+
 @ValidatorRegistry.register("types_check")
 class TypesCheckValidator(ValidatorStrategy):
     """Validates that column values match expected types (string, integer, float, bool)."""
 
-    params_type: ClassVar[Any] = dict[str, Literal["string", "integer", "float", "bool"]]
+    params_model: ClassVar[type[TypesCheckParams]] = TypesCheckParams
 
     def check(self, data: TabularData, params: Any) -> None:
         type_map: dict[str, Literal["string", "integer", "float", "bool"]] = params

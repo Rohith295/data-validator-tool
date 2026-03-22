@@ -1,20 +1,9 @@
-import typing
 from collections.abc import Callable
 from typing import Any, ClassVar
 
-from pydantic import TypeAdapter
 from pydantic import ValidationError as PydanticValidationError
 
 from data_validator.validators.base import ValidatorStrategy
-
-
-def _type_label(tp: Any) -> str:
-    origin = typing.get_origin(tp)
-    if origin is dict:
-        return "a dict"
-    if origin is list:
-        return "a list"
-    return str(tp)
 
 
 def _format_pydantic_error(name: str, err: PydanticValidationError) -> str:
@@ -53,16 +42,19 @@ class ValidatorRegistry:
         return cls._validators[name]()
 
     @classmethod
+    def items(cls) -> list[tuple[str, type[ValidatorStrategy]]]:
+        return sorted(cls._validators.items())
+
+    @classmethod
     def validate_params(cls, name: str, raw_params: Any) -> Any:
-        """Check raw JSON params match what the validator expects (via params_type)."""
+        """Validate raw JSON params against the validator's Pydantic model."""
         if name not in cls._validators:
             raise ValueError(f"No validator registered with name: {name}")
 
         validator_cls = cls._validators[name]
-        adapter = TypeAdapter(validator_cls.params_type)
         try:
-            parsed = adapter.validate_python(raw_params)
+            parsed = validator_cls.params_model.model_validate(raw_params)
         except PydanticValidationError as e:
             raise ValueError(_format_pydantic_error(name, e)) from e
 
-        return validator_cls.validate_params(parsed)
+        return parsed.root

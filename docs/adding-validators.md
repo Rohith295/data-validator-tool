@@ -31,7 +31,7 @@ report = validate(
 
 That's it. The `@ValidatorRegistry.register()` decorator makes it available as soon as the class is defined.
 
-One expectation for new validators: define the validator's input contract as well as its row-level logic. In practice that means setting `params_type`, and adding `validate_params()` when the shape alone is not enough. The goal is to reject bad schema config early and keep `check()` focused on data validation.
+One expectation for new validators: define the validator's input contract as well as its row-level logic. In practice that means adding a Pydantic `params_model` on the validator class. The goal is to reject bad schema config early and keep `check()` focused on data validation.
 
 ## Inside the project (contributing a built-in check)
 
@@ -43,15 +43,20 @@ Say you want to add the same `lowercase_check` as a built-in. Create one file:
 from typing import Any, ClassVar
 
 import polars as pl
+from pydantic import RootModel
 
 from data_validator.models import TabularData, ValidationError
 from data_validator.validators.base import ValidatorStrategy, missing_column_error
 from data_validator.validators.registry import ValidatorRegistry
 
 
+class LowercaseCheckParams(RootModel[list[str]]):
+    pass
+
+
 @ValidatorRegistry.register("lowercase_check")
 class LowercaseCheckValidator(ValidatorStrategy):
-    params_type: ClassVar[Any] = list[str]       # what the schema params look like
+    params_model: ClassVar[type[LowercaseCheckParams]] = LowercaseCheckParams
 
     def check(self, data: TabularData, params: Any) -> None:
         columns: list[str] = params
@@ -77,7 +82,7 @@ Now it works in any schema file:
 { "lowercase_check": { "params": ["email", "username"] } }
 ```
 
-If your validator accepts richer config than a plain list or dict, validate that too. A validator is not finished until its schema params are validated.
+If your validator accepts richer config than a plain list or dict, model that directly in `params_model`. A validator is not finished until its schema params are validated.
 
 ## How it works under the hood
 
@@ -98,31 +103,19 @@ Collects *only* the filtered error rows from the LazyFrame and converts them to 
 
 Append a single `ValidationError` directly — useful for structural issues like missing columns or invalid regex patterns.
 
-### `params_type`
+### `params_model`
 
-Tells the registry how to validate schema params before your `check()` runs. If someone passes `{"email": "pattern"}` to a validator expecting `list[str]`, it blows up at schema load time with a clear error — not somewhere in your code at runtime.
+Tells the registry how to validate schema params before your `check()` runs. If someone passes `{"email": "pattern"}` to a validator expecting a list of column names, it blows up at schema load time with a clear error — not somewhere in your code at runtime.
 
-Common types:
+Common patterns:
 
-| `params_type` | Schema shape | Use case |
+| `params_model` | Schema shape | Use case |
 |---|---|---|
-| `list[str]` | `["col1", "col2"]` | Column name lists |
-| `dict[str, str]` | `{"col": "value"}` | Column-to-value mappings |
-| `dict[str, RangeSpec]` | `{"col": {"min": 0, "max": 100}}` | Pydantic model for richer structures |
+| `RootModel[list[str]]` | `["col1", "col2"]` | Column name lists |
+| `RootModel[dict[str, str]]` | `{"col": "value"}` | Column-to-value mappings |
+| `RootModel[dict[str, RangeSpec]]` | `{"col": {"min": 0, "max": 100}}` | Richer nested config |
 
-See `RangeSpec` in `range.py` for a Pydantic model example.
-
-### `validate_params()`
-
-Use this when `params_type` gets you the right shape but you still need a few rules on top.
-
-Examples:
-
-- allowed string values
-- compiled regex patterns
-- relationships between fields
-
-Keep that logic here instead of inside `check()`. By the time `check()` runs, the validator should be able to assume its config is already valid.
+If you need stricter rules, put them on the Pydantic model itself. `RangeSpec` uses `extra="forbid"` to reject misspelled keys, and `RegexCheckParams` validates that every regex compiles.
 
 ### `@ValidatorRegistry.register("name")`
 

@@ -1,15 +1,21 @@
 from typing import Any, ClassVar
 
+from pydantic import RootModel
+
 from data_validator.models import TabularData, ValidationError
 from data_validator.validators.base import ValidatorStrategy
 from data_validator.validators.registry import ValidatorRegistry
+
+
+class ColumnsCheckParams(RootModel[list[str]]):
+    pass
 
 
 @ValidatorRegistry.register("columns_check")
 class ColumnsCheckValidator(ValidatorStrategy):
     """Checks that the data has exactly the expected columns — no missing, no extra."""
 
-    params_type: ClassVar[Any] = list[str]
+    params_model: ClassVar[type[ColumnsCheckParams]] = ColumnsCheckParams
 
     @property
     def run_once(self) -> bool:

@@ -1,4 +1,4 @@
-from data_validator.validators.base import ValidatorStrategy as ValidatorStrategy
+from data_validator.validators.base import ValidatorStrategy
 from data_validator.validators.implementations import (
     ColumnsCheckValidator,
     NonEmptyCheckValidator,
@@ -7,7 +7,7 @@ from data_validator.validators.implementations import (
     TypesCheckValidator,
     UniqueCheckValidator,
 )
-from data_validator.validators.registry import ValidatorRegistry as ValidatorRegistry
+from data_validator.validators.registry import ValidatorRegistry
 
 __all__ = [
     "ColumnsCheckValidator",

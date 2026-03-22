@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Any, ClassVar
 
 import polars as pl
+from pydantic import RootModel
 
 from data_validator.models import TabularData, ValidationError, ValidationResult
 
@@ -18,12 +19,7 @@ class ValidatorStrategy(ABC):
     See docs/adding-validators.md for usage.
     """
 
-    params_type: ClassVar[Any] = list[str]
-
-    @classmethod
-    def validate_params(cls, params: Any) -> Any:
-        """Validate semantic constraints after params_type parsing."""
-        return params
+    params_model: ClassVar[type[RootModel[Any]]]
 
     def __init__(self) -> None:
         self._errors: list[ValidationError] = []
