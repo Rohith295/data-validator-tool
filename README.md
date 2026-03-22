@@ -1,6 +1,6 @@
 # data-validator
 
-CLI tool and Python library that validates data files against a schema. You define what columns should exist, what types they should be, which ones can't be empty, etc. — the tool does the rest. Currently supports CSV and JSON files.
+A validation that validates data files against a schema. You define what columns should exist, what types they should be, which ones can't be empty, etc. — the tool does the rest. Currently supports CSV and JSON files.
 
 Built for Python 3.10+. Uses Polars under the hood so it doesn't fall over on large files.
 
