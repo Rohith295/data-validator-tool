@@ -148,7 +148,10 @@ def validate(
         history.append(report)
 
         renderer = HTMLReportRenderer()
-        content = renderer.render(report, history=history.load_recent())
+        content = renderer.render(
+            report,
+            history=history.load_recent(file_path=report.file_path),
+        )
         dest = report_dir / f"{file_path.stem}_report.html"
         dest.write_bytes(content)
         typer.echo(f"Report saved: {dest.resolve()}")

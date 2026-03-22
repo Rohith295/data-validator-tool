@@ -12,8 +12,7 @@ _FLOAT_RE = r"^-?(\d+\.?\d*|\d*\.?\d+)([eE][+-]?\d+)?$"
 _BOOL_VALUES = ["true", "false", "0", "1"]
 
 
-class TypesCheckParams(RootModel[dict[str, Literal["string", "integer", "float", "bool"]]]):
-    pass
+class TypesCheckParams(RootModel[dict[str, Literal["string", "integer", "float", "bool"]]]): ...
 
 
 @ValidatorRegistry.register("types_check")

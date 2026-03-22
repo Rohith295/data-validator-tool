@@ -5,8 +5,7 @@ from typing import ClassVar
 import polars as pl
 
 
-class ParseError(Exception):
-    pass
+class ParseError(Exception): ...
 
 
 class ParserStrategy(ABC):

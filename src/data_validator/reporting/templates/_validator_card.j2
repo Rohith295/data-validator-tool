@@ -1,0 +1,38 @@
+{% macro render_validator(result) -%}
+<div class="validator-card">
+    <div class="validator-header" onclick="toggleValidator(this)">
+        <div class="validator-name">
+            <span class="icon {{ 'icon-pass' if result.passed else 'icon-fail' }}">{{ "✓" if result.passed else "✗" }}</span>
+            {{ result.validator_name }}
+        </div>
+        <div class="validator-header-meta">
+            <div class="validator-meta">
+                {% if result.errors %}<span>{{ result.errors | length }} error{{ "s" if result.errors | length != 1 }}</span>{% endif %}
+                <span>{{ result.elapsed_ms | duration }}</span>
+            </div>
+            <span class="chevron">▶</span>
+        </div>
+    </div>
+    {% if result.errors %}
+    <div class="validator-body">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Row</th><th>Column</th><th>Message</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                    {% for err in result.errors %}
+                    <tr>
+                        <td class="row-num">{{ err.row if err.row is not none else "-" }}</td>
+                        <td>{{ err.column or "-" }}</td>
+                        <td>{{ err.message }}</td>
+                        <td class="val">{{ err.value or "-" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{%- endmacro %}

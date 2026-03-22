@@ -15,8 +15,7 @@ class RangeSpec(BaseModel):
     max: float | None = None
 
 
-class RangeCheckParams(RootModel[dict[str, RangeSpec]]):
-    pass
+class RangeCheckParams(RootModel[dict[str, RangeSpec]]): ...
 
 
 @ValidatorRegistry.register("range_check")

@@ -8,8 +8,7 @@ from data_validator.validators.base import ValidatorStrategy, missing_column_err
 from data_validator.validators.registry import ValidatorRegistry
 
 
-class UniqueCheckParams(RootModel[list[str]]):
-    pass
+class UniqueCheckParams(RootModel[list[str]]): ...
 
 
 @ValidatorRegistry.register("unique_check")

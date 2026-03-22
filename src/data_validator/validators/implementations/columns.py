@@ -7,8 +7,7 @@ from data_validator.validators.base import ValidatorStrategy
 from data_validator.validators.registry import ValidatorRegistry
 
 
-class ColumnsCheckParams(RootModel[list[str]]):
-    pass
+class ColumnsCheckParams(RootModel[list[str]]): ...
 
 
 @ValidatorRegistry.register("columns_check")
