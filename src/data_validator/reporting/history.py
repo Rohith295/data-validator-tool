@@ -34,8 +34,15 @@ class ReportHistory:
         self.history_file.parent.mkdir(parents=True, exist_ok=True)
         self.history_file.write_text(json.dumps(history, indent=2), encoding="utf-8")
 
-    def load_recent(self, limit: int = 30) -> list[dict[str, Any]]:
-        return self._load()[-limit:]
+    def load_recent(
+        self,
+        limit: int = 30,
+        file_path: str | None = None,
+    ) -> list[dict[str, Any]]:
+        history = self._load()
+        if file_path is not None:
+            history = [entry for entry in history if entry.get("file_path") == file_path]
+        return history[-limit:]
 
     def _load(self) -> list[dict[str, Any]]:
         if not self.history_file.exists():
