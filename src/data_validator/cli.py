@@ -7,7 +7,7 @@ import typer
 from data_validator.api import validate_file
 from data_validator.config import ExitCode
 from data_validator.notifications.registry import NotifierRegistry
-from data_validator.parser import ParseError
+from data_validator.parsers.base import ParseError
 from data_validator.schema import SchemaError
 
 app = typer.Typer(name="validate")

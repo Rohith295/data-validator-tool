@@ -1,6 +1,7 @@
 import pytest
 
-from data_validator.parser import ParseError, parse
+from data_validator.parser import parse
+from data_validator.parsers.base import ParseError
 
 
 class TestParse:

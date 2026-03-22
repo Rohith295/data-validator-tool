@@ -6,7 +6,6 @@ from pathlib import Path
 import polars as pl
 
 from data_validator.models import TabularData
-from data_validator.parsers.base import ParseError as ParseError  # re-export
 from data_validator.parsers.registry import ParserRegistry
 
 log = logging.getLogger(__name__)
