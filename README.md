@@ -92,6 +92,7 @@ Parsers, validators, and notifications all follow the same pattern: abstract bas
 
 - [CLI usage](docs/cli-usage.md) — all options, schema reference, supported formats, reporting
 - [Notebook usage](docs/notebook-usage.md) — interactive dashboards, DataFrames, cell-by-cell examples
+- [Examples](examples/README.md) — runnable notebooks using the Python API and sample data
 - [Adding a validator](docs/adding-validators.md) — custom data checks
 - [Adding a parser](docs/adding-parsers.md) — new file format support
 - [Adding a notification channel](docs/adding-notifications.md) — Slack, email, S3, etc.

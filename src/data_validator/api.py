@@ -1,4 +1,4 @@
-"""Programmatic API for using data-validator from Python code."""
+"""API for using data-validator programmatically"""
 
 from __future__ import annotations
 

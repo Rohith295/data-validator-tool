@@ -6,6 +6,17 @@ Install the library and you have everything — validate data, inspect results, 
 pip install data-validator
 ```
 
+If you want working repo examples instead of copy-pasting snippets, see the notebooks in `examples/`.
+
+For local development, install the dev dependencies and register the virtualenv as a Jupyter kernel:
+
+```bash
+pip install -e ".[dev]"
+python -m ipykernel install --user --name data-validator --display-name "Python (data-validator)"
+```
+
+Then choose the `Python (data-validator)` kernel inside Jupyter before running the notebook cells.
+
 ## Quick start
 
 ```python
