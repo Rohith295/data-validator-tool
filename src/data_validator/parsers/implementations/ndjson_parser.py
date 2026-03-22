@@ -15,7 +15,7 @@ _LAZY_THRESHOLD = 100 * 1024 * 1024  # 100 MB
 class NdjsonParser(ParserStrategy):
     """Parses JSONL/NDJSON files. Uses lazy scanning for files > 100 MB."""
 
-    def read(self, path: Path) -> pl.DataFrame:
+    def read(self, path: Path) -> pl.DataFrame | pl.LazyFrame:
         file_size = path.stat().st_size
         if file_size == 0:
             raise ParseError(f"File is empty: {path}")

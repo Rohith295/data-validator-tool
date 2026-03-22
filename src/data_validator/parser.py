@@ -45,6 +45,7 @@ def parse(file_path: Path) -> TabularData:
         row_count = -1  # deferred — avoids scanning the entire file
         log.info("Parsed %s (lazy): cols=%d", file_path.name, len(cols))
     else:
+        assert isinstance(frame, pl.DataFrame)
         row_count = len(frame)
         log.info("Parsed %s: %d rows x %d cols", file_path.name, row_count, len(cols))
 
@@ -64,12 +65,13 @@ def parse_dataframe(
     fmt: str = "dataframe",
 ) -> TabularData:
     """Wrap an in-memory DataFrame into TabularData (same normalization as file parsing)."""
-    df = _normalize(df)
+    normalized = _normalize(df)
+    assert isinstance(normalized, pl.DataFrame)
     return TabularData(
-        headers=list(df.columns),
-        df=df,
+        headers=list(normalized.columns),
+        df=normalized,
         file_path=file_path,
         encoding_detected="utf-8",
-        row_count=len(df),
+        row_count=len(normalized),
         format=fmt,
     )

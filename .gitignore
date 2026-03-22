@@ -20,3 +20,4 @@ venv/
 .idea/
 .vscode/
 reports/
+sync-to-mini.sh

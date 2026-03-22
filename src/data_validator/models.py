@@ -26,15 +26,17 @@ class TabularData(BaseModel):
     @property
     def lf(self) -> pl.LazyFrame:
         """LazyFrame with ``_row_idx`` attached. Works for both eager and lazy sources."""
-        if isinstance(self.df, pl.LazyFrame):
-            return self.df.with_row_index("_row_idx")
-        return self.df.lazy().with_row_index("_row_idx")
+        df: pl.DataFrame | pl.LazyFrame = self.df
+        if isinstance(df, pl.LazyFrame):
+            return df.with_row_index("_row_idx")
+        return df.lazy().with_row_index("_row_idx")
 
     def as_lazy(self) -> pl.LazyFrame:
         """Return a LazyFrame regardless of whether df is eager or lazy."""
-        if isinstance(self.df, pl.LazyFrame):
-            return self.df
-        return self.df.lazy()
+        df: pl.DataFrame | pl.LazyFrame = self.df
+        if isinstance(df, pl.LazyFrame):
+            return df
+        return df.lazy()
 
 
 class ValidationError(BaseModel):

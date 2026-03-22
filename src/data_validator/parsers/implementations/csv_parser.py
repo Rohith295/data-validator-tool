@@ -24,6 +24,7 @@ class CsvParser(ParserStrategy):
 
         sep = self._detect_separator(path)
 
+        frame: pl.DataFrame | pl.LazyFrame
         if file_size > _LAZY_THRESHOLD:
             log.info("File %s is %d MB, using lazy scan", path, file_size // (1024 * 1024))
             frame = self._read_lazy(path, sep)
