@@ -1,0 +1,94 @@
+{
+    "validations": [
+        {
+            "columns_check": {
+                "params": [
+                    "Product ID",
+                    "SKU",
+                    "Name",
+                    "Product URL",
+                    "Price",
+                    "Retail Price",
+                    "Thumbnail URL",
+                    "Search Keywords",
+                    "Description",
+                    "Category",
+                    "Category ID",
+                    "Brand",
+                    "Child SKU",
+                    "Child Price",
+                    "Color",
+                    "Color Family",
+                    "Color Swatches",
+                    "Size",
+                    "Shoe Size",
+                    "Pants Size",
+                    "Occassion",
+                    "Season",
+                    "Badges",
+                    "Rating Avg",
+                    "Rating Count",
+                    "Inventory Count",
+                    "Date Created"
+                ]
+            }
+        },
+        {
+            "non_empty_check": {
+                "params": [
+                    "Product ID",
+                    "SKU",
+                    "Name",
+                    "Product URL",
+                    "Price",
+                    "Retail Price",
+                    "Thumbnail URL",
+                    "Brand",
+                    "Category",
+                    "Category ID",
+                    "Date Created"
+                ]
+            }
+        },
+        {
+            "types_check": {
+                "params": {
+                    "Price": "float",
+                    "Retail Price": "float",
+                    "Rating Avg": "float",
+                    "Rating Count": "integer",
+                    "Inventory Count": "integer",
+                    "Product ID": "integer"
+                }
+            }
+        },
+        {
+            "range_check": {
+                "params": {
+                    "Price": {"min": 0, "max": 100000},
+                    "Retail Price": {"min": 0, "max": 100000},
+                    "Rating Avg": {"min": 0, "max": 5},
+                    "Rating Count": {"min": 0, "max": 1000000},
+                    "Inventory Count": {"min": 0, "max": 1000000}
+                }
+            }
+        },
+        {
+            "regex_check": {
+                "params": {
+                    "Product URL": "https?://.*",
+                    "Thumbnail URL": "https?://.*\\.(png|jpg|jpeg|gif|webp)",
+                    "Date Created": "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"
+                }
+            }
+        },
+        {
+            "unique_check": {
+                "params": [
+                    "Product ID",
+                    "SKU"
+                ]
+            }
+        }
+    ]
+}

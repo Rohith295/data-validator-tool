@@ -1,0 +1,35 @@
+{
+    "validations": [
+        {
+            "columns_check": {
+                "params": [
+                    "name",
+                    "position",
+                    "age",
+                    "salary",
+                    "active"
+                ]
+            }
+        },
+        {
+            "non_empty_check": {
+                "params": [
+                    "name",
+                    "salary",
+                    "active"
+                ]
+            }
+        },
+        {
+            "types_check": {
+                "params": {
+                    "name": "string",
+                    "position": "string",
+                    "age": "integer",
+                    "salary": "float",
+                    "active": "bool"
+                }
+            }
+        }
+    ]
+}

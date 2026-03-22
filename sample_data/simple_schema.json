@@ -1,0 +1,9 @@
+{
+    "validations": [
+        {"columns_check": {"params": ["id", "email", "name", "age", "salary"]}},
+        {"non_empty_check": {"params": ["id", "email", "name"]}},
+        {"types_check": {"params": {"age": "integer", "salary": "float"}}},
+        {"unique_check": {"params": ["id"]}},
+        {"range_check": {"params": {"age": {"min": 0, "max": 150}}}}
+    ]
+}

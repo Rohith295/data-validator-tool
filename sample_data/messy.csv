@@ -1,0 +1,11 @@
+id,email,name,age,salary,department,active
+1,alice@company.com,Alice Smith,30,75000.50,Engineering,true
+2,bob@company.com,Bob Jones,25,62000.00,Marketing,false
+3,charlie@company,Charlie Brown,abc,55000.00,Sales,true
+4,,Dave Wilson,,80000.00,Engineering,yes
+5,eve@company.com,  ,28,not_a_number,Marketing,true
+6,frank@company.com,Frank Miller,35,70000.00,Sales,false
+7,grace@company.com,Grace Lee,200,90000.00,,true
+8,grace@company.com,Henry Adams,42,65000.00,Engineering,false
+,,,,,,
+10,jane@company.com,Jane Doe,-5,45000.00,Marketing,true

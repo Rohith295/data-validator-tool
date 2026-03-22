@@ -1,0 +1,4 @@
+id|email|name|age|salary
+1|alice@test.com|Alice|30|75000
+2||Bob|abc|60000
+3|charlie@test.com||25|not_a_number

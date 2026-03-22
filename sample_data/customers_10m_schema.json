@@ -1,0 +1,74 @@
+{
+    "validations": [
+        {
+            "columns_check": {
+                "params": [
+                    "Index",
+                    "Customer Id",
+                    "First Name",
+                    "Last Name",
+                    "Company",
+                    "City",
+                    "Country",
+                    "Phone 1",
+                    "Phone 2",
+                    "Email",
+                    "Subscription Date",
+                    "Website"
+                ]
+            }
+        },
+        {
+            "non_empty_check": {
+                "params": [
+                    "Customer Id",
+                    "First Name",
+                    "Email"
+                ]
+            }
+        },
+        {
+            "types_check": {
+                "params": {
+                    "Index": "integer",
+                    "Customer Id": "string",
+                    "First Name": "string",
+                    "Last Name": "string",
+                    "Company": "string",
+                    "City": "string",
+                    "Country": "string",
+                    "Phone 1": "string",
+                    "Phone 2": "string",
+                    "Email": "string",
+                    "Subscription Date": "string",
+                    "Website": "string"
+                }
+            }
+        },
+        {
+            "unique_check": {
+                "params": [
+                    "Customer Id"
+                ]
+            }
+        },
+        {
+            "regex_check": {
+                "params": {
+                    "Email": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+                    "Subscription Date": "^\\d{4}-\\d{2}-\\d{2}$"
+                }
+            }
+        },
+        {
+            "range_check": {
+                "params": {
+                    "Index": {
+                        "min": 1,
+                        "max": 10000000
+                    }
+                }
+            }
+        }
+    ]
+}
