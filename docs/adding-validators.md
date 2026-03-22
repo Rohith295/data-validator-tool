@@ -31,6 +31,8 @@ report = validate(
 
 That's it. The `@ValidatorRegistry.register()` decorator makes it available as soon as the class is defined.
 
+One expectation for new validators: define the validator's input contract as well as its row-level logic. In practice that means setting `params_type`, and adding `validate_params()` when the shape alone is not enough. The goal is to reject bad schema config early and keep `check()` focused on data validation.
+
 ## Inside the project (contributing a built-in check)
 
 Say you want to add the same `lowercase_check` as a built-in. Create one file:
@@ -75,13 +77,13 @@ Now it works in any schema file:
 { "lowercase_check": { "params": ["email", "username"] } }
 ```
 
+If your validator accepts richer config than a plain list or dict, validate that too. A validator is not finished until its schema params are validated.
+
 ## How it works under the hood
 
 ### `data.lf`
 
-A Polars **LazyFrame** with a `_row_idx` column already attached. Use standard Polars expressions to filter down to bad rows — this builds a query plan (no data loaded yet). Polars optimizes and executes it only when errors are collected.
-
-Works transparently for both small files (eager DataFrame wrapped as lazy — near-zero cost) and large files (true LazyFrame from `scan_csv` / `scan_ndjson` — full predicate/projection pushdown).
+A Polars **LazyFrame**. Use standard Polars expressions to filter down to bad rows — this builds a query plan (no data loaded yet). Polars optimizes and executes it only when errors are collected.
 
 ### `self._add_errors(lf, col, message)`
 
@@ -109,6 +111,18 @@ Common types:
 | `dict[str, RangeSpec]` | `{"col": {"min": 0, "max": 100}}` | Pydantic model for richer structures |
 
 See `RangeSpec` in `range.py` for a Pydantic model example.
+
+### `validate_params()`
+
+Use this when `params_type` gets you the right shape but you still need a few rules on top.
+
+Examples:
+
+- allowed string values
+- compiled regex patterns
+- relationships between fields
+
+Keep that logic here instead of inside `check()`. By the time `check()` runs, the validator should be able to assume its config is already valid.
 
 ### `@ValidatorRegistry.register("name")`
 

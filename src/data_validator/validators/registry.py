@@ -17,6 +17,19 @@ def _type_label(tp: Any) -> str:
     return str(tp)
 
 
+def _format_pydantic_error(name: str, err: PydanticValidationError) -> str:
+    details: list[str] = []
+    for item in err.errors():
+        loc = " -> ".join(str(part) for part in item.get("loc", ()))
+        msg = item.get("msg", "invalid value")
+        if loc:
+            details.append(f"{loc}: {msg}")
+        else:
+            details.append(msg)
+    joined = "; ".join(details)
+    return f"Invalid params for '{name}': {joined}"
+
+
 class ValidatorRegistry:
     """Maps check names (e.g. "columns_check") to their ValidatorStrategy classes."""
 
@@ -43,15 +56,13 @@ class ValidatorRegistry:
     def validate_params(cls, name: str, raw_params: Any) -> Any:
         """Check raw JSON params match what the validator expects (via params_type)."""
         if name not in cls._validators:
-            return raw_params  # unknown validator — will fail in get()
+            raise ValueError(f"No validator registered with name: {name}")
 
         validator_cls = cls._validators[name]
         adapter = TypeAdapter(validator_cls.params_type)
         try:
-            return adapter.validate_python(raw_params)
+            parsed = adapter.validate_python(raw_params)
         except PydanticValidationError as e:
-            raise ValueError(
-                f"'{name}' expects params as "
-                f"{_type_label(validator_cls.params_type)}, "
-                f"got {type(raw_params).__name__}"
-            ) from e
+            raise ValueError(_format_pydantic_error(name, e)) from e
+
+        return validator_cls.validate_params(parsed)

@@ -1,4 +1,4 @@
-from typing import Any, ClassVar
+from typing import Any, ClassVar, Literal
 
 import polars as pl
 
@@ -15,10 +15,10 @@ _BOOL_VALUES = ["true", "false", "0", "1"]
 class TypesCheckValidator(ValidatorStrategy):
     """Validates that column values match expected types (string, integer, float, bool)."""
 
-    params_type: ClassVar[Any] = dict[str, str]
+    params_type: ClassVar[Any] = dict[str, Literal["string", "integer", "float", "bool"]]
 
     def check(self, data: TabularData, params: Any) -> None:
-        type_map: dict[str, str] = params
+        type_map: dict[str, Literal["string", "integer", "float", "bool"]] = params
         available = set(data.headers)
 
         for col, expected_type in type_map.items():
@@ -41,7 +41,5 @@ class TypesCheckValidator(ValidatorStrategy):
                 bad = non_empty.filter(
                     ~pl.col(col).str.to_lowercase().is_in(_BOOL_VALUES),
                 )
-            else:
-                continue
 
             self._add_errors(bad, col, f"Expected type '{expected_type}'")

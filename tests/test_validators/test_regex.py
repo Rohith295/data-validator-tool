@@ -1,4 +1,5 @@
 import polars as pl
+import pytest
 
 from data_validator.models import TabularData
 from data_validator.validators.implementations.regex import RegexCheckValidator
@@ -31,6 +32,5 @@ class TestRegexCheck:
         assert len(result.errors) == 1
 
     def test_invalid_regex_pattern(self):
-        data = make_data(["x"], [{"x": "abc"}])
-        result = self.v.validate("regex_check", data, {"x": "[invalid"})
-        assert "Invalid regex" in result.errors[0].message
+        with pytest.raises(ValueError, match="Invalid regex pattern"):
+            RegexCheckValidator.validate_params({"x": "[invalid"})

@@ -1,7 +1,7 @@
 from typing import Any, ClassVar
 
 import polars as pl
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from data_validator.models import TabularData
 from data_validator.validators.base import ValidatorStrategy, missing_column_error
@@ -9,6 +9,8 @@ from data_validator.validators.registry import ValidatorRegistry
 
 
 class RangeSpec(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     min: float | None = None
     max: float | None = None
 

@@ -3,7 +3,7 @@ from typing import Any, ClassVar
 
 import polars as pl
 
-from data_validator.models import TabularData, ValidationError
+from data_validator.models import TabularData
 from data_validator.validators.base import ValidatorStrategy, missing_column_error
 from data_validator.validators.registry import ValidatorRegistry
 
@@ -14,6 +14,16 @@ class RegexCheckValidator(ValidatorStrategy):
 
     params_type: ClassVar[Any] = dict[str, str]
 
+    @classmethod
+    def validate_params(cls, params: Any) -> Any:
+        pattern_map: dict[str, str] = params
+        for col, pattern in pattern_map.items():
+            try:
+                re.compile(pattern)
+            except re.error as e:
+                raise ValueError(f"Invalid regex pattern for column '{col}': {e}") from e
+        return params
+
     def check(self, data: TabularData, params: Any) -> None:
         pattern_map: dict[str, str] = params
         available = set(data.headers)
@@ -21,12 +31,6 @@ class RegexCheckValidator(ValidatorStrategy):
         for col, pattern in pattern_map.items():
             if col not in available:
                 self._add_error(missing_column_error(col))
-                continue
-
-            try:
-                re.compile(pattern)
-            except re.error as e:
-                self._add_error(ValidationError(column=col, message=f"Invalid regex pattern: {e}"))
                 continue
 
             non_empty = data.lf.filter(

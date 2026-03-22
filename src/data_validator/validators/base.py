@@ -20,6 +20,11 @@ class ValidatorStrategy(ABC):
 
     params_type: ClassVar[Any] = list[str]
 
+    @classmethod
+    def validate_params(cls, params: Any) -> Any:
+        """Validate semantic constraints after params_type parsing."""
+        return params
+
     def __init__(self) -> None:
         self._errors: list[ValidationError] = []
 
