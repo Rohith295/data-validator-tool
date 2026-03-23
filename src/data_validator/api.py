@@ -27,18 +27,6 @@ def _summary(text: str | None) -> str:
     return cleandoc(text).splitlines()[0]
 
 
-def _type_name(tp: Any) -> str:
-    if isinstance(tp, type) and issubclass(tp, RootModel):
-        return tp.__name__
-
-    text = str(tp)
-    text = text.replace("typing.", "")
-    return text.replace(
-        "data_validator.validators.implementations.range.",
-        "",
-    )
-
-
 def _schema_json(model: type[RootModel[Any]]) -> str:
     schema = model.model_json_schema()
     return json.dumps(schema, indent=2, sort_keys=True)

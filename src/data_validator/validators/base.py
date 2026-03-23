@@ -24,10 +24,6 @@ class ValidatorStrategy(ABC):
     def __init__(self) -> None:
         self._errors: list[ValidationError] = []
 
-    @property
-    def run_once(self) -> bool:
-        return False
-
     def _add_errors(
         self,
         lf: pl.LazyFrame,

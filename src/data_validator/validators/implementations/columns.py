@@ -16,10 +16,6 @@ class ColumnsCheckValidator(ValidatorStrategy):
 
     params_model: ClassVar[type[ColumnsCheckParams]] = ColumnsCheckParams
 
-    @property
-    def run_once(self) -> bool:
-        return True
-
     def check(self, data: TabularData, params: Any) -> None:
         columns: list[str] = params
         expected = set(columns)
